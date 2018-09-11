@@ -28,7 +28,12 @@ func (t *tracer) Trace(a ...interface{}) {
 }
 
 // nilTracer will go here
+type nilTracer struct{}
 
 // Trace for nil tracer does nada
+func (t *nilTracer) Trace(a ...interface{}) {}
 
 // Off creates a tracer that will ignore calls to Trace
+func Off() Tracer {
+	return &nilTracer{}
+}

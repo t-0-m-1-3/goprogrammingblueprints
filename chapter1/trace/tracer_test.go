@@ -20,3 +20,9 @@ func TestNew(t *testing.T) {
 	}
 
 }
+
+// TestOff will test the off function to get a silent tracer
+func TestOff(t *testing.T) {
+	var silentTracer Tracer = Off()
+	silentTracer.Trace("something")
+}
