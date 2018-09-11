@@ -4,10 +4,12 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sync"
 	"text/template"
 
+	"github.com/goblueprints/chapter1/trace"
 	"github.com/gorilla/websocket"
 )
 
@@ -60,6 +62,7 @@ func main() {
 	var addr = flag.String("addr", ":8080", "The Addr of the application.")
 	flag.Parse() // Parse the flags
 	r := newRoom()
+	r.tracer = trace.New(os.Stdout)
 	// root
 	http.Handle("/", &templateHandler{filename: "chat.html"})
 	http.Handle("/room", r)
