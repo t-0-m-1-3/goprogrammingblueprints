@@ -42,7 +42,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("TODO handle login for", provider)
 	default:
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Println("This is a test line")
 		fmt.Fprintf(w, "Auth action %s not supported", action)
 	}
 }
