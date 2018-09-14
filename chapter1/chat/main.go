@@ -11,6 +11,8 @@ import (
 
 	"github.com/goblueprints/chapter1/trace"
 	"github.com/gorilla/websocket"
+	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/providers/google"
 )
 
 // client represents a single chatting user
@@ -61,8 +63,16 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var addr = flag.String("addr", ":8080", "The Addr of the application.")
 	flag.Parse() // Parse the flags
+	// setup the gomniauth
+	gomniauth.SetSecurityKey("ThIs ShOUuLd Be A LOnGEr HsAsH")
+	gomniauth.WithProviders(
+		google.New("582452063131-su1uc8s0kpcm6og9l99tdlkerunbldah.apps.googleusercontent.com", "Tt8OX219j0gFGt2b1XjP54q_ ",
+			"http://localhost:8080/auth/callback/google"),
+	)
+
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
+
 	// root
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
@@ -71,6 +81,7 @@ func main() {
 
 	// get the room going
 	go r.run()
+
 	// start the web server
 	log.Println("Starting the Web Server on :", *addr)
 	if err := http.ListenAndServe(*addr, nil); err != nil {
